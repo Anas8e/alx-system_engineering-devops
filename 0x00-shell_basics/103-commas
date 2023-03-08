@@ -1,0 +1,2 @@
+#!/bin/bash
+ls -1apv | tr '\n' ',' | sed 's/,$/\n/'
