@@ -1,4 +1,23 @@
 #!/usr/bin/env bash
-# Start Apache so as to return a
-# page conatining Hello Holberton
+# This script starts a Docker container and fixes Apache to serve "Hello Holberton"
+
+# Start Docker container and map ports
+docker run -p 8080:80 -d -it holbertonschool/265-0
+
+# Check container status
+docker ps
+
+# Access the container's shell
+docker exec -it <CONTAINER_ID> /bin/bash
+
+# Check if Apache is running
+service apache2 status
+
+# If Apache is not running, start it
 service apache2 start
+
+# Exit the container's shell
+exit
+
+# Test the container by querying port 8080
+curl 0:8080
