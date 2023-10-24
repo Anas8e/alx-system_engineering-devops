@@ -1,18 +1,49 @@
 #!/usr/bin/python3
-"""Exports to-do list information for a given employee ID to CSV format."""
+"""
+Check student .CSV output of user information
+"""
+
 import csv
 import requests
 import sys
 
-if __name__ == "__main__":
-    user_id = sys.argv[1]
-    url = "https://jsonplaceholder.typicode.com/"
-    user = requests.get(url + "users/{}".format(user_id)).json()
-    username = user.get("username")
-    todos = requests.get(url + "todos", params={"userId": user_id}).json()
+users_url = "https://jsonplaceholder.typicode.com/users?id="
+todos_url = "https://jsonplaceholder.typicode.com/todos"
 
-    with open("{}.csv".format(user_id), "w", newline="") as csvfile:
-        writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
-        [writer.writerow(
-            [user_id, username, t.get("completed"), t.get("title")]
-         ) for t in todos]
+
+def user_info(id):
+    """ Check user information """
+
+    # Retrieve user information
+    response = requests.get(users_url + str(id))
+    if response.status_code != 200:
+        print("User ID and Username: API request failed")
+        return
+
+    user_data = response.json()
+    if not user_data:
+        print("User ID and Username: User not found")
+        return
+
+    username = user_data[0]['username']
+
+    # Check if the CSV file exists
+    try:
+        with open(str(id) + ".csv", 'r') as f:
+            csv_data = f.read()
+
+        # Verify User ID and Username in the CSV data
+        if str(id) in csv_data and username in csv_data:
+            print("User ID and Username: OK")
+        else:
+            print("User ID or Username: Incorrect")
+    except FileNotFoundError:
+        print("User ID and Username: CSV file not found")
+
+
+if __name__ == "__main":
+    if len(sys.argv) != 2:
+        print("Usage: {} <user_id>".format(sys.argv[0]))
+        sys.exit(1)
+
+    user_info(int(sys.argv[1]))
