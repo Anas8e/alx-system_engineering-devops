@@ -4,18 +4,18 @@
 """
 import requests
 
-def number_of_subscribers(subreddit):
+def number_of_subscribers(subreddit, user_agent="my_user_agent"):
     url = f"https://www.reddit.com/r/{subreddit}/about.json"
-    headers = {'User-Agent': 'my_user_agent'}  # Set your User-Agent here
+    headers = {'User-Agent': user_agent}
 
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, allow_redirects=False)
 
-    if response.status_code == 200:
-        data = response.json()
-        subscribers = data['data']['subscribers']
-        return subscribers
-    else:
+    if response.status_code == 404:
         return 0
+
+    data = response.json()
+    subscribers = data['data']['subscribers']
+    return subscribers
 
 if __name__ == "__main__":
     import sys
@@ -26,4 +26,5 @@ if __name__ == "__main__":
         subreddit = sys.argv[1]
         subscribers = number_of_subscribers(subreddit)
         print(subscribers)
+
 
