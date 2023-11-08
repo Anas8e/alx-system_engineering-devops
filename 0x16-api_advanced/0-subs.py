@@ -2,6 +2,7 @@
 """
 0-subs
 """
+
 import requests
 
 def number_of_subscribers(subreddit, user_agent="my_user_agent"):
