@@ -1,10 +1,10 @@
 # Puppet Manifest to Optimize Nginx Configuration
 
-# Resource to fix Nginx configuration
-exec { 'fix--for-nginx':
-  command     => '/usr/sbin/nginx -s reload',  # Reload Nginx server
+exec { 'reload-nginx':
+  command     => '/usr/sbin/service nginx reload',  # Command to reload Nginx service
   path        => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-  refreshonly => true,                          # Only execute when notified
-  subscribe   => Package['nginx'],              # Subscribe to Nginx package changes
-  notify      => Service['nginx'],              # Notify Nginx service to restart
+  refreshonly => true,                              # Execute only on trigger
+  unless      => '/usr/sbin/service nginx status | grep "not running"', # Check if Nginx is not running
+  logoutput   => true,                              # Log the output of the command
+  notify      => Service['nginx'],                  # Notify the Nginx service
 }
