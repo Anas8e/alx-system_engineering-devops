@@ -1,20 +1,15 @@
-# Puppet manifest to debug and optimize the Nginx server configuration
-
-# Define the Nginx service
-service { 'nginx':
-  ensure => running, # Ensure the service is running
+#Increases the amount of traffic an Nginx server can handle.
+# Increase the ULIMIT of the default file
+exec { 'fix--for-nginx':
+  #Modify the ULIMIT value
+  command => '/bin/sed -i "s/15/4096/" /etc/default/nginx',
+  #Specify the path for the sed command
+  path => '/usr/local/bin/:/bin/',
 }
-
-# Define the Nginx configuration file
-file { '/etc/nginx/sites-available/default':
-  ensure  => file, # Ensure it's a file
-  content => template('nginx/default.erb'), # Use a template for configuration
-  notify  => Service['nginx'], # Notify the service of changes
+#Restart Nginx
+exec {'nginx-restart':
+  # Restart Nginx service
+  command => '/etc/init.d/nginx restart',
+  # Specify the path for the init.d script
+  path => '/etc/init.d/',
 }
-
-# Define a custom Nginx configuration template
-file { '/etc/nginx/default.erb':
-  ensure  => file,
-  content => '# Optimized Nginx configuration goes here',
-}
-
