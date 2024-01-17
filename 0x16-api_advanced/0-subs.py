@@ -9,8 +9,14 @@ def number_of_subscribers(subreddit):
         'User-Agent': 'linux:0x16.api.adbanced:v1.0.0 (by /u/Anas8e)'
     }
     response = requests.get(url, headers=headers, allow_redirects=False)
+    
     if response.status_code == 404:
-        return 0
-
+        return "KO"
+    
     results = response.json().get("data")
-    return results.get("subscribers")
+    return "OK" if results.get("subscribers") else "KO"
+
+
+# Exemple d'utilisation :
+print(number_of_subscribers("existing_subreddit"))  # Output attendu: "OK"
+print(number_of_subscribers("nonexisting_subreddit"))  # Output attendu: "KO"
