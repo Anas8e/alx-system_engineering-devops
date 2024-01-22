@@ -1,7 +1,5 @@
 # Postmortem: The Great Financial Portfolio Fumble
 
-![Financial Portfolio Fumble](https://example.com/pretty_diagram.png)
-
 **The Drama Unfolds:**
 - **Duration:** January 15, 2024, 2:00 PM — January 16, 2024, 4:00 AM (UTC)
 - **Impact:** Picture this - our Financial Portfolio Manager doing the cha-cha with intermittent service disruptions. About 15% of users got a front-row seat to this unexpected dance party.
